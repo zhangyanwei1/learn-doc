@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SeaJs Demo</title>
+</head>
+<body>
+    <h1 id="title">seajs demo</h1>
+    <script src="sea-module/sea.js"></script>
+    <script>
+        seajs.config({
+            //别名配置
+            alias:{
+                'changeText':'./changeText.js',
+                'jquery':'jquery/jquery'
+            }
+        })
+
+        //加载模块
+        seajs.use('./static/main.js');
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>QUEUE</title>
+    <style>
+    div{
+        margin: 3px;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        left: 0px;
+        top:30px;
+        background-color: green;
+        display: none;
+    }
+    div.newcolor{
+        background-color: blue;
+    }
+    </style>
+</head>
+<body>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <div> </div>
+
+    <script src="../jquery-3.2.1.js"></script>
+    <script>
+        $("#start").click(function(){
+            $("div").show('slow');
+            $('div').animate({left:'+=200'},2000);
+
+            $("div").queue(function () {
+                $(this).addClass("newcolor");
+                $(this).dequeue();
+            });
+            $("div").animate({left:'-=200'},2000);
+
+            $("div").queue(function () {
+                $(this).removeClass("newcolor"); 
+                //使用 dequeue() 终止一个自定义的队列函数 并执行他。
+                $(this).dequeue();
+            });
+            $("div").slideUp();
+        })
+
+        $("#stop").click(function () {
+            //$("div").clearQueue();
+            $("div").queue("fx", []);
+        });
+    </script>
+</body>
+</html>
