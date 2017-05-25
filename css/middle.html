@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>元素居中方法</title>
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    body{
+        font-size: 16px;
+    }
+    .text-inline{
+        height: 100px;
+        border:1px solid #ccc;
+        text-align: center;
+    }
+    .text-inline img{
+        height: 50px;
+        width: 50px;
+    }
+    .has-width{
+        width: 200px;
+        border: 1px solid #ccc;
+        margin: 10px auto;
+    }
+    .wrap{
+        float: left;
+        position: relative;
+        left: 50%;
+        clear: both;
+        height: 100px;
+    }
+    .wrap .child{
+        border: 1px solid blue;
+        position: relative;
+        left: -50%;
+        height: 50px;
+    }
+    .relative{
+        position: relative;
+        margin-top: 100px;
+    }
+    .absolute{
+        position: absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+    }
+    .more-div{
+        margin-top: 120px;
+        text-align: center;
+        font-size: 0;
+    }
+    .more-div p{
+        font-size: 16px;
+    }
+    .more-div .item{
+        display: inline-block;
+        width: 50px;
+        height: 20px;
+        background-color: palegreen;
+        margin: 10px;
+    }
+    </style>
+</head>
+<body>
+    <div class="text-inline">
+        <span>文字图片水平居中，在父容器设置：text-align:center;</span><br/>
+        <img src="https://avatars0.githubusercontent.com/u/17850858?v=3&s=460" alt="">
+    </div>
+    <div class="has-width">
+        块级元素,宽度固定：margin:0 auto;(对浮动以及绝对固定定位元素无效。)
+    </div>
+    <div class="wrap">
+        <div class="child">
+            宽度不固定。可加一层包裹元素，包裹元素：float:left;position:relative;left:50%;
+        </div>
+    </div>
+    <div class="relative">
+        <div class="absolute">
+            父元素相对定位，子元素绝对定位。
+        </div>
+    </div>
+    <div class="more-div">
+        <p>多个会块级元素，父元素：text-align:center;子元素设置inline-block;注意处理空格。</p>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+    </div>
+</body>
+</html>
