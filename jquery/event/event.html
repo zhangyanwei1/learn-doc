@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jquery事件</title>
+    <style>
+        ul{
+            list-style: none;
+            padding: 0;
+        }
+        ul.first > li{
+            float: left;
+        }
+        a{
+            text-decoration: none;
+            width: 160px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background-color: pink;
+            display: inline-block;
+            border: 1px solid #fff;
+        }
+        ul.second{
+            display: none;
+        }
+        .sroll{
+            width: 400px;
+            height: 200px;
+            background-color: #eee;
+            overflow: auto;
+        }
+        .sroll .inner{
+            width: 80%;
+            margin:0 auto;
+            height: 800px;
+            background-color: pink;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p>这是一个段落</p>
+        <p>这是一个段落</p>
+        <button class="toggle">切换显隐</button>
+        <button class="toggleClick">切换颜色</button>
+        <form>
+            <input type="text" name="name" />
+            <input type="text" name="phone" />
+            <button type="submit">提交</button>
+        </form>
+        <ul class="first">
+            <li>
+                <a href="#">首页</a>
+                <ul class="second">
+                    <li><a href="#">二级菜单</a></li>
+                    <li><a href="#">二级菜单</a></li>
+                    <li><a href="#">二级菜单</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">首页</a>
+                <ul class="second">
+                    <li><a href="#">二级菜单</a></li>
+                    <li><a href="#">二级菜单</a></li>
+                    <li><a href="#">二级菜单</a></li>
+                </ul>
+            </li>
+        </ul>
+        <div class="sroll">
+            <div class="inner">
+                <p>段落文字文字，，段落文字文字，，段落文字文字，，段落文字文字，，段落文字文字，，</p>
+            </div>
+        </div>
+    </div>
+    <script src="../jquery.js"></script>
+    <script>
+        $(function(){
+            $("p").on("click",function(){
+                console.log($(this).text());
+            });
+
+            //可以传递数据
+            $("p").on("click",{foo:"bar"},function(event){
+                console.log(event.data.foo);
+            })
+
+            //阻止事件的默认行为
+            $("form").on("submit",function(event){
+                event.preventDefault();
+            })
+
+            //一次性事件绑定 one()
+            $("p").one("click",function(){
+                console.log("这是一次性事件绑定，只会被执行一次");
+            })
+
+            //trigger()函数
+            //1、模拟事件
+            $("p").trigger("click");
+
+            //2、触发自定义事件
+            $("input[name='name']").on("myClick",function(){
+                console.log($(this).val());
+            });
+            $("input[name='name']").trigger("myClick");
+
+            //3、传递数据
+            $("p:last").on("myClick",function(event,a,b){
+                console.log(a+b);
+            }).trigger("myClick",["hello","trigger"]);
+
+            //4、执行默认操作：会使input元素本身得到焦点（浏览器默认操作）
+            $("input:first").trigger("focus");
+
+            //triggerHandler()与trigger类似
+            //不会触发浏览器默认事件，只会触发第一个
+            $("p").triggerHandler("click");//只触发第一个元素
+
+            //hover()事件：模仿鼠标悬停事件
+            $(".first>li").hover(
+                function(){
+                    $(this).find(".second").slideDown();
+                },
+                function(){
+                    $(this).find(".second").slideUp();
+                }
+            )
+
+            //toggle()方法：
+            //事件：绑定多个事件，轮流的 click 事件，1.9版本移除了
+            //效果：元素隐藏显示切换效果
+            $(".toggle").on("click",function(){
+                $("p").toggle();
+            })
+
+
+            //blur事件会在元素失去焦点的时候触发，既可以是鼠标行为，也可以是按tab键离开的
+            $("input:first").blur(function(){
+                console.log("发生blur事件。");
+            })
+
+            //change事件：仅适用于文本域以及select元素
+            //该事件会在元素失去焦点时发生。
+            $("input:first").change(function(){
+                var val = $(this).val();
+                console.log(val);
+            })
+
+            //error事件：当元素遇到错误（没有正确载入）时，发生 error 事件。
+            $("img").on("error",function(){
+                console.log("图片路径错误");
+            })
+
+            //当元素获得焦点时，触发 focus 事件。
+            $("input:last").focus(function(){
+                this.blur();
+            });
+
+            //keydown事件，当键盘或按钮被按下时，按下 的时候发生
+            $("input:first").keydown(function(){
+                console.log($(this).val());
+            })
+
+            //当调整浏览器窗口的大小时，发生 resize 事件。
+            $(window).resize(function(){
+                console.log($("body").width());
+            })
+
+            //当用户滚动指定的元素时，会发生 scroll 事件。
+            //scroll 事件适用于所有可滚动的元素和 window 对象（浏览器窗口）。
+            $(".sroll").scroll(function(){
+                
+            });
+        });        
+    </script>
+    <img src="" alt="无效图片" />
+</body>
+</html>

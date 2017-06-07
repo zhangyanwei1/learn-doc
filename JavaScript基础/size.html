@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>元素大小</title>
+    <style>
+        .outer{
+            width:400px;
+            height: 200px;
+            overflow: auto;
+            border: 1px solid red; 
+            padding: 10px;
+            position: relative;
+            top:50px;
+            left:100px;
+        }
+        .inner{
+            width: 100px;
+            height: 400px;
+            background-color: pink;
+            padding: 10px;
+            border: 1px solid blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer">
+        <div class="inner">
+        
+        </div>
+    </div>
+    
+    <script>
+        var inner = document.getElementsByClassName("inner")[0];
+        var outer = document.getElementsByClassName("outer")[0];
+        
+        function getElementLeft(ele){
+            var actualLeft = ele.offsetLeft;
+            var current = ele.offsetParent;
+
+            while(current!==null){
+                actualLeft += current.offsetLeft;
+                current = current.offsetParent;
+            }
+            
+            return actualLeft;
+        }
+    </script>
+</body>
+</html>
