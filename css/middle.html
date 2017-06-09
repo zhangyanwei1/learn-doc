@@ -13,6 +13,12 @@
     body{
         font-size: 16px;
     }
+    h3{
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        color: #666;
+    }
     .text-inline{
         height: 100px;
         border:1px solid #ccc;
@@ -65,9 +71,72 @@
         background-color: palegreen;
         margin: 10px;
     }
+
+    .one-line{
+        height: 50px;
+        line-height: 50px;
+        border: 1px solid pink;
+        margin-bottom: 10px;
+    }
+    .more-line{
+        width: 800px;
+        height: 120px;
+        /*margin-top: 10px;*/
+        border: 1px solid pink;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .more-line span{
+        display: inline-block;
+        width: 600px;
+        vertical-align: middle;
+    }
+    .more-line img{
+        height: 80px;
+        vertical-align: middle;
+    }
+    .no-height{
+        padding: 10px 0;
+        border: 1px solid pink;
+    }
+    .block-parent{
+        position: relative;
+        height: 200px;
+        border: 1px solid pink;
+    }
+    .child-has-height{
+        position: absolute;
+        width: 400px;
+        height: 100px;
+        top:50%;
+        left: 50%;
+        /*margin-top: -50px;
+        margin-left: -200px;*/
+        background: pink;
+        transform: translate(-50%,-50%);
+    }
+    .child-has-height2{
+        width: 400px;
+        height: 100px;
+        position: absolute;
+        margin: auto;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: pink;
+    }
+    .parent-table-cell{
+        display: table-cell;
+        vertical-align: middle;
+        height: 200px;
+        border: 1px solid black;
+        width: 400px;
+    }
     </style>
 </head>
 <body>
+    <h3>水平居中</h3>
     <div class="text-inline">
         <span>文字图片水平居中，在父容器设置：text-align:center;</span><br/>
         <img src="https://avatars0.githubusercontent.com/u/17850858?v=3&s=460" alt="">
@@ -90,6 +159,32 @@
         <div class="item"></div>
         <div class="item"></div>
         <div class="item"></div>
+    </div>
+
+    <h3>垂直居中</h3>
+    <p class="one-line">高度固定,单行文本，方法一：line-height</p>
+    <div class="more-line">
+        <img src="https://avatars0.githubusercontent.com/u/17850858?v=3&s=460" alt="">
+        <span>高度固定，多行文本，方法：vertical-align...第二行文字，第二行文字，第二行文字。第二行文字，第二行文字，第二行文字。 </span>
+    </div>
+    <div class="no-height">
+        <p>高度不固定，上下padding法</p>
+    </div>
+    <div class="block-parent">
+        <div class="child-has-height">
+            <p>块级元素，尺寸固定，父元素relative，子元素absolute，结合使用margin或者 使用transform：translate()，尺寸不固定也可以使用transform计算。</p>
+        </div>
+    </div>
+    <div class="block-parent">
+        <div class="child-has-height2">
+            <p>尺寸固定，父元素relative，子元素absolute，四个0法。</p>
+        </div>
+    </div>
+    <div class="parent-table-cell">
+        <div class="block-no-height">
+            <p>尺寸不固定，父元素table-cell+vertical-align</p>
+            <p>很多文字，居中元素高度不固定</p>
+        </div>
     </div>
 </body>
 </html>
