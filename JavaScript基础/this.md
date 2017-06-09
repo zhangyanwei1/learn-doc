@@ -1,7 +1,7 @@
 自己在写代码时对this的指向总是靠猜的，这里整理一下。  
 
 this是什么？  
-> this是js函数的内置参数，每创建一个js函数都会自动生成this参数。与之同时产生的内置参数还有arguments。
+> 在函数内部，有两个特殊的对象：arguments和this。this引用的是函数据以执行的环境对象。this对象是在运行时基于函数的执行环境绑定的。
 
 this有什么用处？   
 > this用于在js函数调用时指明函数调用上下文，建立函数内部与调用上下文之间的联系。此处尤其需要注意的是，只有当函数调用时，this建立的上下文联系才存在；仅仅定义函数而不调用，this所建立的上下文联系并不存在。并且这种上下文联系的类型，决定于函数调用的方式。
@@ -10,7 +10,7 @@ this有什么用处？
 + 方法调用模式
 + 函数调用模式
 + 构造器调用模式
-+ apply/calld调用模式
++ apply/call调用模式
 
 #### 方法调用模式
 函数被定义为对象的方法时，以对象的方法形式调用该函数。
@@ -21,6 +21,10 @@ var o = {
     }
 }
 o.init();//o
+
+//如果我将这个对象的方法赋给一个变量，再调用，就是函数调用模式
+var func = o.init;
+func(); //window
 ```
 
 #### 函数调用模式
@@ -60,6 +64,18 @@ obj.init();//obj
 
 //一种简单的方式区分是方法调用还是函数调用，方法调用是通过 "." 去调用
 //函数调用是函数名后面跟() 去调用
+
+//匿名函数的执行环境具有全局性，因此其this对象通常指向window
+var name = "window";
+var obj = {
+    name : "MyObject",
+    getName : function(){
+        return function(){
+            return this.name;
+        }
+    }
+}
+console.log(obj.getName()());//window
 ```
 
 #### 构造器调用模式
@@ -86,18 +102,22 @@ person.hasOwnProperty("age");//true
 ```
 
 #### 显示的改变this指向模式
-apply（call）方法允许我们构建一个参数数组传递给调用函数，也允许我们选择this的值。它接受两个参数，第一个是要绑定给this的值，第二个是一个参数数组。
+apply（call）方法允许我们构建一个参数数组传递给调用函数，也允许我们选择this的值。它接受两个参数，第一个是要绑定给this的值，第二个是一个参数数组。他们强大之处是能够扩充函数赖以运行的作用域。
 ```
-function Parent(name){
-    this.name = name;
+window.color = "red";
+
+var obj = {
+    color : "blue"
 }
 
-function Child(age){
-    Parent.call(this,"zhang");
-    this.age = age;
+function sayColor(){
+    console.log(this.color);
 }
 
-Child.prototype = new Parent();
-var child = new Child();
-child.hasOwnProperty("name");//true
+sayColor();//red
+
+sayColor.call(this);
+sayColor.call(window);
+sayColor.call(obj);
+
 ```
