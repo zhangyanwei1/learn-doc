@@ -78,4 +78,4 @@ document.documentElement访问的是HTML元素
 + scrollLeft：被隐藏在内容区域左侧的像素距离，设置这个属性可以改变元素的滚动位置。
 
 图示：
-![](http://runninggiant.cn/kod/index.php?share/file&user=103&sid=4b5rt8p6)
+![](http://runninggiant.cn/kod/index.php?user/public_link&fid=3dceo8tA1PRmswB3YwdkS9ulcyGNRq6OKXwbPhaYpFRA-qV9AMaTPl2Co_F8fxFOrv5IHctBjQzRJ-O6fQWNZQzccG452-qSmahfyyVBHd0qlNBf3gYue0-fOr8q3ChljVOzkGdvEi-3d8VJjdeHZxdhbhz0o002MsUMTt4&file_name=/QQ%E5%9B%BE%E7%89%8720170607213840.png)
