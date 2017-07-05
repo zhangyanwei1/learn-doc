@@ -37,3 +37,9 @@ $.extend(true,{},object1,object2)
 //不一样：banner，第一种情况，object2的相同属性直接覆盖了第一个。
 //深拷贝时，banner将递归再次合并。
 ```
+### 源码学习
+```
+jQuery.extend = jQuery.fn.extand = function(){
+
+}
+```
