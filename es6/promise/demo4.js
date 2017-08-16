@@ -9,7 +9,8 @@ getJSON('/posts.json').then(json => {
 }).then(() => {
     //...
 })
-//上面代码中使用then方法，指定了两个回调函数。第一个回调函数完成以后，会将返回结果作为参数，传入第二个回调函数。
+//上面代码中使用then方法，指定了两个回调函数。
+//第一个回调函数完成以后，会将返回结果作为参数，传入第二个回调函数。
 
 //采用链式的then，可以指定一组按照次序调用的回调函数。这是，前一个回调函数有可能返回一个Promise对象（有异步操作），
 //这时后一个回调函数就会等待该Promise对象的状态发生变化，才会调用。
@@ -20,3 +21,7 @@ getJSON('/posts/1.json').then(
     comments => console.log('Resolved：',comments),
     err => console.log('Rejected：',err)
 )
+
+//上面代码中，第一个then方法执行的回调函数，返回另一个Promise对象。
+//第二个then方法指定的回调函数就会等待这个新的Promise对象状态发生变化；
+//如果Resolve就调用第二个then的第一个参数函数，rejected就调用第二个then方法得第二个参数函数。
