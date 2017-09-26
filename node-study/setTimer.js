@@ -9,7 +9,7 @@ setTimeout(function () {
 	console.log(Date.now() - start);
 
 	//然后执行一段很耗时的循环
-	for(var i = 0; i < 10000000000; i++) {}
+	for(var i = 0; i < 1000000000; i++) {}
 },1000)
 
 //检测这个定时器打印出的时间
@@ -42,13 +42,16 @@ function b () {}
 /*
 Http服务器例子
 */
+var http = require('http');
 http.createServer (function () {
 	a();
 });
 function a () {
 	b();
 }
-function b () {}
+function b () {
+	console.log("bbbbb");
+}
 
 //一旦HTTP请求到达服务器，Node就会分发一个通知。最终，回调函数会被执行，并且调用堆栈变为 a -> b 。
 
