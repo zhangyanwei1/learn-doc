@@ -153,3 +153,37 @@ a.constructor === Foo.prototype.constructor //false
 //结果导致实例对象不是Foo类的实例。
 ```
 类必须使用`new`调用，否则会报错，这点跟普通构造函数不一致，普通构造函数不用new也可以执行。
+
+### 类的实例对象
+生成类的实例对象，与ES5一样，使用`new`命令。
+与ES5一样，实例属性除非显式定义在其本身（即定义在`this`对象上），否则都是定义在原型上。
+```
+//定义类
+class Point {
+    constructor(x,y) {
+        this.x = x;
+        this.y = y;
+    }
+    toString(){
+        return '('+this.x+','+this.y+')';
+    }
+}
+
+var point = new Point(2, 3);
+
+point.toString() // (2, 3)
+
+point.hasOwnProperty('x') // true
+point.hasOwnProperty('y') // true
+point.hasOwnProperty('toString') // false
+point.__proto__.hasOwnProperty('toString') // true
+```
+与ES5一样，类的所有实例共享一个原型对象。
+```
+var p1 = new Point(1,2);
+var p2 = new Point(2,3);
+
+p1.__proto__ === p2.__proto__      //true
+```
+p1和p2都是`Point`的实例，原型都是`Point.prototype`，所以`__proto__`属性是相等的。
+这意味着，可以通过实例的`__proto__`属性为类添加方法。
