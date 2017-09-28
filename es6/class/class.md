@@ -187,3 +187,186 @@ p1.__proto__ === p2.__proto__      //true
 ```
 p1和p2都是`Point`的实例，原型都是`Point.prototype`，所以`__proto__`属性是相等的。
 这意味着，可以通过实例的`__proto__`属性为类添加方法。
+```
+var point = new Point(1,2);
+point.__proto__.printName = function() {return "point"}
+
+point.printName();  //'point'
+
+var p1 = new Point(2,3);
+p1.printName();  //'point'
+```
+使用实例的`__proto__`属性改写原型，必须相当谨慎，不推荐使用，因为这会改变类的原型，影响所有的实例。
+### this的指向
+类的方法内部如果含有this，它默认指向类的实例。但是，如果将这个方法提取出来单独使用，`this`会指向该方法运行时所在的环境，很可能会报错。
+```
+class Logger {
+  printName(name = 'there') {
+    this.print(`Hello ${name}`);
+  }
+
+  print(text) {
+    console.log(text);
+  }
+}
+
+const logger = new Logger();
+const { printName } = logger;
+printName(); // TypeError: Cannot read property 'print' of undefined
+```
+上面代码中，`printName`方法放在全局调用，`this`指向`window`，这个环境没有对应的`print`函数，`print`是实例的方法，`this`指向这个实例才可以调用它。   
+
+所以不报错的解决方案就是如何改变函数中`this`的指向。
+在JavaScript中，call、apply和bind是Function对象自带的三个方法，这三个方法的主要作用是改变函数中的this指向。他们三个的第一个参数都是this要指向的对象。  
+
+区别：bind 是返回对应函数，bind方法的返回值是函数，便于稍后调用；apply 、call 则是立即调用。
+```
+printName.call(logger) //Hello there
+
+printName.apply(logger) //Hello there
+
+printName.bind(logger)() //Hello there
+```
+另一种解决方法是使用箭头函数。   
+箭头函数：函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。
+```
+class Logger {
+  constructor() {
+    this.printName = (name = 'there') => {
+      this.print(`Hello ${name}`);
+    };
+  }
+
+  // ...
+}
+```
+由于本质上，ES6的类只是ES5的构造函数的一层封装，所以函数的许多特性都被`Class`继承，包括`name`属性。
+```
+class Point {}
+Point.name // "Point"
+```
+`name`属性总是返回紧跟在`class`关键字后面的类名。
+### Class的取值函数（getter）和存值函数（setter）
+与ES5一样，在类的内部可以使用`get`和`set`关键字，对某个属性设置存值函数和取值函数，拦截该属性的存取行为。
+```
+class MyClass {
+  constructor() {}
+  get prop() {
+    return 'getter';
+  }
+  set prop(value) {
+    console.log('setter: '+value);
+  }
+}
+
+let inst = new MyClass();
+
+inst.prop = 123; // setter: 123
+
+inst.prop  // 'getter'
+```
+存值函数和取值函数是设置在Descriptor对象上的。
+与ES5一样，使用`Object.getOwnPropertyDescriptor()`方法，可以取得给定属性的描述符，参数：属性所在的对象、要读取描述符的名称。返回值是一个对象，如果是访问器属性，这个对象的属性有：`configuable`、`enumerable`、`get`、`set`，如果是数据属性，这个对象的属性有：`configuable`、`enumerable`、`writable`、`value`
+```
+class Cus {
+    constructor(ele) {
+        this.element = ele;
+    }
+
+    get html() {
+        return this.element.innerHTML;
+    }
+
+    set html(value) {
+        this.element.innerHTML = value;
+    }
+}
+
+var desc = Object.getOwnPropertyDescriptor(Cus.prototype,"html");
+```
+### class的静态方法
+类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上`static`关键字，就表示该方法不会被实例继承，而是直接通过类来调用，称为“静态方法”。
+```
+class Foo {
+  static classMethod() {
+    return 'hello';
+  }
+}
+
+Foo.classMethod() // 'hello'
+
+var foo = new Foo();
+foo.classMethod()
+// TypeError: foo.classMethod is not a function
+```
+注意：如果静态方法包含`this`关键字，这个`this`指的是类，而不是实例。
+```
+class Foo {
+  static bar () {
+    this.baz();
+  }
+  static baz () {
+    console.log('hello');
+  }
+  baz () {
+    console.log('world');
+  }
+}
+
+Foo.bar() // hello
+```
+静态方法内部`this.baz()`等同于调用`Foo.baz()`。因此，可以看出，静态方法可以和非静态方法重名。父类的静态方法，可以被子类继承。
+### class的静态属性和实例属性  
+静态属性指的是Class本身的属性，而不是定义在实例对象`this`上的属性。
+定义类的静态属性，通过类的对象`.`去添加，不可以通过`static`，Class内部只有静态方法，没有静态属性。
+```
+// 以下两种写法都无效
+class Foo {
+  // 写法一
+  prop: 2
+
+  // 写法二
+  static prop: 2
+}
+
+Foo.prop // undefined
+```
+### new.target 属性
+`new`是从构造函数生成实例的命令。ES6为`new`命令引入了一个`new.target`属性，该属性一般用在构造函数中，返回`new`命令作用于的那个构造函数。如果构造函数不是通过new命令调用的，`new.target`会返回`undefined`，因此这个属性可以用来确定构造函数是怎么调用的。
+```
+function Person(){
+    console.log(new.target);
+}
+Person() //undefined
+
+var person = new Person();
+
+/*ƒ Person(){
+    console.log(new.target);
+}*/
+```
+Class 内部调用new.target，返回当前 Class。
+
+注意：子类继承父类时，`new.target`会返回子类。
+
+利用这个特点，可以写出不能独立使用、必须继承才能使用的类。
+```
+class Shape {
+  constructor() {
+    if (new.target === Shape) {
+      throw new Error('本类不能实例化');
+    }
+  }
+}
+
+class Rectangle extends Shape {
+  constructor(length, width) {
+    super();
+    // ...
+  }
+}
+
+var x = new Shape();  // 报错
+var y = new Rectangle(3, 4);  // 正确
+```
+注意，在函数外部，使用`new.target`会报错。
