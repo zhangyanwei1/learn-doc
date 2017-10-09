@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/jquery.js"></script>    
+    <script type="text/javascript" src="./js/handlebars.js"></script>
+</head>
+<body>
+    <script id="entry-template" type="text/x-handlebars-template">
+        <div class="demo">  
+            <h1>{{title}}</h1>
+
+            {{! 使用with的方法，我们可以将context转移到数据的一个section里面，限定作用域。要访问这个作用域之外的数据使用../ }}
+            
+            {{#with author}}
+                <h3>authed by {{firstName}} {{lastName}}</h3>
+                <p>访问上级参数：{{../parter}}</p>
+            {{/with}}
+            <p>{{func}}</p>
+
+            {{!在表达式后面跟随一个#号来表示Blocks，然后通过 / 来结束Blocks。
+                如果当前的表达式是一个数组，则Handlebars会“自动展开数组”，
+                并将Blocks的上下文设为数组中的元素。}}
+
+            <ul>
+                {{#programme}}
+                    <li>{{language}}</li>
+                {{/programme}}
+            </ul>
+
+            {{! 我们也可以使用#each(这是内置的helper)，遍历列表块内容，用this来引用遍历的元素}}
+
+            <p>each遍历</p>
+            <ul>
+                {{#each programme}}
+                    <li>{{this.language}}</li>
+                {{/each}}
+            </ul>
+
+            {{! 我们可以使用#if渲染条件代码块，就你使用JavaScript一样，你可以指定条件渲染DOM，
+            如果它的参数返回false，undefined, null, "" 或者 []，
+            Handlebar将不会渲染DOM，如果写了#else，将执行else}}
+
+            {{! #unless 与if相反，如果参数返回假，则渲染}}
+
+            <p>如果list数组有值，就会渲染一个列表，否则显示无数据：</p>
+            {{#if list}}
+                <ul>
+                    {{#each list}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <p>list无数据</p>
+            {{/if}}
+
+            {{#unless list}}
+                <p>list无数据</p>
+            {{/unless}}
+        </div>  
+    </script>
+
+    <script>
+        var source   = $("#entry-template").html();//用jquery获取模板
+        var template = Handlebars.compile(source);//预编译模板
+
+        //如果匹配项是一个函数，则函数会被调用
+        function getName(para){
+            return "cdsfch"+para
+        }
+
+        //模拟json数据
+        var context = {
+            title: "Handlebars", 
+            content: "learn Handlebars",
+            func:getName(12),
+            programme: [
+                {language: "JavaScript"},
+                {language: "HTML"},
+                {language: "CSS"}
+            ],
+            list:[],
+            author:{
+                firstName: "yanwei",
+                lastName: "Zhang"
+            },
+            parter:"dale"
+        };
+
+        //匹配json内容
+        var html = template(context);
+    </script>
+
+    <script>
+        //输入模板
+        $('body').html(html);
+    </script>
+</body>
+</html>
