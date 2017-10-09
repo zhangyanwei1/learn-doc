@@ -31,12 +31,20 @@
                 {{/programme}}
             </ul>
 
-            {{! 我们也可以使用#each(这是内置的helper)，遍历列表块内容，用this来引用遍历的元素}}
+            {{! 我们也可以使用#each(这是内置的helper)，遍历列表块内容，用this来引用遍历的元素。
+                同时也可以用来遍历对象，这时@key表示属性名,this表示对应的值}}
 
             <p>each遍历</p>
             <ul>
-                {{#each programme}}
-                    <li>{{this.language}}</li>
+                {{#each programme as |value|}}
+                    <li> {{this.language}}</li>
+                {{/each}}
+            </ul>
+
+            <p>遍历对象</p>
+            <ul>
+                {{#each author}}
+                    <li>{{@key}}：{{this}}</li>
                 {{/each}}
             </ul>
 
